@@ -19,6 +19,15 @@ class AuthController extends GetxController {
       await prefs.remove('token');
     }
   }
+  Future<bool> checkToken() async {
+    bool token = await _authService.checkToken();
+    if (token) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+    return token;
+  }
   void logout() async {
     setLoggedIn(false);
     Get.offAll(LoginScreen());
