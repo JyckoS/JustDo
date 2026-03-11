@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:justdo/constants/app_colors.dart';
 import 'package:justdo/services/auth_service.dart';
 import 'package:justdo/views/home_screen.dart';
+import 'package:justdo/views/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
@@ -17,6 +18,12 @@ class AuthController extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('token');
     }
+  }
+  void logout() async {
+    setLoggedIn(false);
+    Get.offAll(LoginScreen());
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
   }
   Future<void> login(String email, String password) async {
     isLoading.value = true;

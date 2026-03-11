@@ -6,6 +6,8 @@ import 'package:justdo/controllers/auth_controller.dart';
 import 'package:justdo/controllers/todo_controller.dart';
 import 'package:justdo/models/todo.dart';
 import 'package:justdo/widgets/home_screen/todo_row.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -16,14 +18,48 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
+      // make a bottom sheet to a clickable link to the github repo
+      bottomSheet: Container(
+        color: AppColors.backgroundColor,
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Made with ❤️ by JicoSoft',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
+            GestureDetector(
+              onTap: () async {
+                // open github repo in another tab
+                print("Go github");
+                    final Uri url = Uri.parse('https://github.com/JyckoS/JustDo/tree/main/justdo');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+              },
+              child: Text(
+                ' OPEN SOURCE CODE',
+                style: TextStyle(color: AppColors.primaryColor, decoration: TextDecoration.underline),
+              ),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.logout),
+          color: Colors.white,
+          onPressed: () => authController.logout(),
+        ),
         title: const Text('My TODOs'),
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
       ),
       body: Obx(() {
         final todos = controller.todos;
-        if (todos.isEmpty) {
+        
+if (todos.isEmpty) {
           return Center(
             child: Text(
               'No tasks yet',
@@ -40,6 +76,8 @@ class HomeScreen extends StatelessWidget {
             return TodoRow(todo: todo, controller: controller, index: index,);
           },
         );
+  
+    
       }),
       floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.secondaryColor,

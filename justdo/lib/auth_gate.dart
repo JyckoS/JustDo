@@ -15,7 +15,7 @@ class AuthGate extends StatelessWidget {
   final authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
-
+    bool loggedIn = false;
     return FutureBuilder(future: SharedPreferences.getInstance(), builder: (context, snapshot) {
       if (snapshot.hasData) {
         final prefs = snapshot.data!;
@@ -23,16 +23,31 @@ class AuthGate extends StatelessWidget {
         if (token != null && token.isNotEmpty) {
           // User is logged in
          Debug.log("user is logged in");
+                   loggedIn = true;
+
           todoController.loadTodo();
           authController.setLoggedIn(true);
           return HomeScreen();
         } 
         // User is not logged in
-        return LoginScreen();
+        if (!loggedIn) {
+          Debug.log("user is not logged in 1");
+
+          return LoginScreen();
+        }
       } else {
         // User is not logged in
+        if (!loggedIn) {
+          Debug.log("user is not logged in 2");
+          return LoginScreen();
+        }
+      }
+      if (!loggedIn) {
+        Debug.log("user is not logged in 3");
         return LoginScreen();
       }
+      Debug.log("user is not logged in 4");
+      return loggedIn ? HomeScreen() : LoginScreen();
     });
   }
 }

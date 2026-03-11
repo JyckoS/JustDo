@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:justdo/auth_gate.dart';
 import 'package:justdo/views/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
@@ -12,7 +13,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: LoginScreen(),
+      home: AuthGate(),
     );
   }
 }
